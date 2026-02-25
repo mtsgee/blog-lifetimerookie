@@ -191,8 +191,8 @@ const posts = (await getCollection('blog')).sort(
 					long and short form. Always a student, forever curious.
 				</p>
 				<div class="hero-buttons">
-					<a href="/blog" class="btn btn-primary">Read the Blog</a>
-					<a href="/about" class="btn btn-secondary">About Me</a>
+					<a href="/long-form" class="btn btn-primary">Long Form</a>
+					<a href="/dailies" class="btn btn-secondary">Dailies</a>
 				</div>
 			</section>
 
@@ -202,7 +202,7 @@ const posts = (await getCollection('blog')).sort(
 					<ul class="posts-list">
 						{posts.slice(0, 5).map((post) => (
 							<li>
-								<a href={`/blog/${post.id}/`}>
+								<a href={`/long-form/${post.id}/`}>
 									<span class="post-title">{post.data.title}</span>
 									<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
 								</a>
@@ -212,16 +212,13 @@ const posts = (await getCollection('blog')).sort(
 				) : (
 					<p>No posts yet. Check back soon!</p>
 				)}
-				<a href="/blog" class="view-all">View all posts &rarr;</a>
+				<a href="/long-form" class="view-all">View all posts &rarr;</a>
 			</section>
 
 			<section aria-labelledby="find-me">
 				<h2 id="find-me">Find Me Around the Web</h2>
 				<ul class="social-list">
-					<li><a href="https://github.com/">GitHub</a></li>
-					<li><a href="https://twitter.com/">Twitter/X</a></li>
-					<li><a href="https://bsky.app/">Bluesky</a></li>
-					<li><a href="https://linkedin.com/">LinkedIn</a></li>
+					<li><a href="https://twitter.com/playingcatch">Twitter/X</a></li>
 				</ul>
 			</section>
 		</main>

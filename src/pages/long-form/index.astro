@@ -1,0 +1,113 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import Header from '../../components/Header.astro';
+import { SITE_TITLE } from '../../consts';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Long Form | ${SITE_TITLE}`} description="Long form, evergreen content on life, soccer, wealth, and money." />
+		<style>
+			.page-header {
+				margin-bottom: 2rem;
+			}
+
+			.page-header h1 {
+				margin-bottom: 0.5rem;
+			}
+
+			.page-header p {
+				color: rgb(var(--gray));
+				margin: 0;
+			}
+
+			.posts-list {
+				list-style: none;
+				padding: 0;
+				margin: 0;
+			}
+
+			.posts-list li {
+				margin-bottom: 0.75rem;
+			}
+
+			.posts-list a {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-between;
+				align-items: baseline;
+				gap: 0.5rem;
+				text-decoration: none;
+				padding: 0.75rem 0;
+				border-bottom: 1px solid rgb(var(--gray-light));
+				transition: color 0.2s ease;
+			}
+
+			.posts-list a:hover {
+				color: var(--accent);
+			}
+
+			.posts-list a:focus-visible {
+				outline: 2px solid var(--accent);
+				outline-offset: 4px;
+				border-radius: 2px;
+			}
+
+			.post-title {
+				color: rgb(var(--black));
+				font-weight: 500;
+			}
+
+			.posts-list a:hover .post-title {
+				color: var(--accent);
+			}
+
+			.post-date {
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+				white-space: nowrap;
+			}
+
+			.empty-state {
+				text-align: center;
+				padding: 3rem 1rem;
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>Long Form</h1>
+				<p>Evergreen content and deeper dives</p>
+			</div>
+
+			{posts.length > 0 ? (
+				<ul class="posts-list">
+					{posts.map((post) => (
+						<li>
+							<a href={`/long-form/${post.id}/`}>
+								<span class="post-title">{post.data.title}</span>
+								<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+							</a>
+						</li>
+					))}
+				</ul>
+			) : (
+				<div class="empty-state">
+					<p>No posts yet. Check back soon!</p>
+				</div>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>
