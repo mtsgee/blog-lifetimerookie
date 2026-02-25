@@ -5,31 +5,21 @@ import HeaderLink from './HeaderLink.astro';
 <header>
 	<nav>
 		<a href="/" class="site-title">Lifetime Rookie</a>
-		<div class="internal-links">
+		<div class="nav-links">
 			<HeaderLink href="/">Home</HeaderLink>
+			<span class="separator">|</span>
 			<HeaderLink href="/long-form">Long Form</HeaderLink>
-			<HeaderLink href="/dailies">Dailies</HeaderLink>
+			<span class="separator">|</span>
+			<HeaderLink href="/random-thoughts">Random Thoughts</HeaderLink>
+			<span class="separator">|</span>
 			<HeaderLink href="/about">About</HeaderLink>
-		</div>
-		<div class="social-links">
-			<a href="https://twitter.com/playingcatch" target="_blank" rel="noopener noreferrer">
-				<span class="sr-only">Twitter/X</span>
-				<svg viewBox="0 0 16 16" aria-hidden="true" width="28" height="28">
-					<path
-						fill="currentColor"
-						d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"
-					></path>
-				</svg>
-			</a>
 		</div>
 	</nav>
 </header>
 <style>
 	header {
-		margin: 0;
-		padding: 0 1em;
-		background: white;
-		box-shadow: 0 2px 8px rgba(var(--black), 5%);
+		border-bottom: 1px solid rgb(var(--gray-light));
+		background: #fff;
 	}
 
 	nav {
@@ -38,6 +28,7 @@ import HeaderLink from './HeaderLink.astro';
 		justify-content: space-between;
 		max-width: 720px;
 		margin: 0 auto;
+		padding: 1rem 1em;
 	}
 
 	.site-title {
@@ -45,54 +36,35 @@ import HeaderLink from './HeaderLink.astro';
 		font-size: 1.1rem;
 		text-decoration: none;
 		color: rgb(var(--black));
-		padding: 1em 0;
 	}
 
 	.site-title:hover {
 		color: var(--accent);
 	}
 
-	.site-title:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 2px;
-		border-radius: 2px;
-	}
-
-	.internal-links {
+	.nav-links {
 		display: flex;
-		gap: 0.25rem;
+		align-items: center;
+		gap: 0.75rem;
+		font-size: 0.95rem;
 	}
 
-	.social-links {
-		display: flex;
-		gap: 0.5rem;
+	.separator {
+		color: rgb(var(--gray-light));
+		user-select: none;
 	}
 
-	.social-links a {
-		display: flex;
-		padding: 0.5em;
-		color: rgb(var(--gray));
-		text-decoration: none;
-		transition: color 0.2s ease;
-	}
-
-	.social-links a:hover {
-		color: var(--accent);
-	}
-
-	.social-links a:focus-visible {
-		outline: 2px solid var(--accent);
-		outline-offset: 2px;
-		border-radius: 4px;
-	}
-
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
+	@media (max-width: 600px) {
+		nav {
+			flex-direction: column;
+			gap: 0.75rem;
+			text-align: center;
 		}
 
-		.internal-links {
-			gap: 0;
+		.nav-links {
+			gap: 0.5rem;
+			flex-wrap: wrap;
+			justify-content: center;
 		}
 	}
 </style>
