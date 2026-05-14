@@ -1,8 +1,14 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const moneyPosts = (await getCollection('money')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
 ---
 
 <!doctype html>
@@ -12,33 +18,33 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<style>
 			.hero {
 				text-align: center;
-				padding: 3rem 1rem;
-				margin-bottom: 2rem;
+				padding: 4rem 1rem 3rem;
 			}
 
 			.hero h1 {
-				font-size: 2.5rem;
+				font-size: 2.75rem;
 				margin-bottom: 0.5rem;
-				text-wrap: balance;
+				letter-spacing: -0.02em;
 			}
 
 			.hero-tagline {
 				color: rgb(var(--gray));
 				font-size: 1.125rem;
-				margin-bottom: 1.5rem;
+				margin-bottom: 1rem;
 			}
 
 			.hero-intro {
 				max-width: 600px;
-				margin: 0 auto 2rem auto;
-				line-height: 1.7;
+				margin: 0 auto;
+				line-height: 1.8;
+				color: rgb(var(--gray-dark));
 			}
 
-			/* Section Cards */
+			/* Category sections */
 			.section-grid {
 				display: grid;
 				grid-template-columns: repeat(3, 1fr);
-				gap: 1.5rem;
+				gap: 1.25rem;
 				margin-bottom: 3rem;
 			}
 
@@ -47,100 +53,88 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 				flex-direction: column;
 				padding: 1.5rem;
 				border: 1px solid rgb(var(--gray-light));
-				border-radius: 0.5rem;
+				border-radius: var(--radius);
 				text-decoration: none;
 				color: inherit;
-				transition: border-color 0.2s ease, box-shadow 0.2s ease;
+				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+				box-shadow: var(--card-shadow);
 			}
 
 			.section-card:hover {
-				border-color: var(--accent);
-				box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-			}
-
-			.section-card:focus-visible {
-				outline: 2px solid var(--accent);
-				outline-offset: 2px;
+				transform: translateY(-2px);
+				box-shadow: var(--card-shadow-hover);
+				border-color: rgb(var(--gray));
 			}
 
 			.section-card h2 {
-				font-size: 1.25rem;
+				font-size: 1.15rem;
 				margin: 0 0 0.5rem 0;
-				color: var(--accent);
 			}
 
 			.section-card p {
 				margin: 0;
-				font-size: 0.95rem;
+				font-size: 0.9rem;
 				line-height: 1.6;
 				color: rgb(var(--gray));
 			}
 
-			.social-list {
-				list-style: none;
-				padding: 0;
-				margin: 0;
-				display: flex;
-				flex-wrap: wrap;
-				gap: 0.5rem 1.5rem;
-			}
-
-			.social-list a {
-				text-decoration: none;
-				transition: color 0.2s ease;
-			}
-
-			.social-list a:hover {
-				color: var(--accent);
-			}
-
-			.social-list a:focus-visible {
-				outline: 2px solid var(--accent);
-				outline-offset: 2px;
-				border-radius: 2px;
-			}
-
 			@media (max-width: 640px) {
-				.section-grid {
-					grid-template-columns: 1fr;
-				}
+				.hero { padding: 2.5rem 1rem 2rem; }
+				.hero h1 { font-size: 2rem; }
+				.section-grid { grid-template-columns: 1fr; }
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section class="hero" aria-labelledby="hero-title">
-				<h1 id="hero-title">Lifetime Rookie</h1>
+			<section class="hero">
+				<h1>Lifetime Rookie</h1>
 				<p class="hero-tagline">Always learning, never an expert</p>
 				<p class="hero-intro">
-					Welcome to my corner of the Internet. I write about <strong>personal</strong> growth,
-					<strong>money</strong>, and my <strong>interests</strong>.
-					Always a student, forever curious.
+					Welcome. I write about personal growth, money, and whatever else
+					catches my curiosity. Always a student, forever open to learning.
 				</p>
 			</section>
 
 			<div class="section-grid">
 				<a href="/personal" class="section-card">
-					<h2>Personal</h2>
-					<p>Portfolio, resume, and professional journey.</p>
+					<span class="card-tag personal">Personal</span>
+					<h2>Portfolio &amp; Resume</h2>
+					<p>My professional journey, background, and what drives me.</p>
 				</a>
 				<a href="/money" class="section-card">
-					<h2>Money</h2>
-					<p>Financial analysis, company deep dives, and stock research.</p>
+					<span class="card-tag money">Money</span>
+					<h2>Financial Analysis</h2>
+					<p>Company deep dives, stock research, and investing thoughts.</p>
 				</a>
 				<a href="/interests" class="section-card">
-					<h2>Interests</h2>
-					<p>Random thoughts, observations, and musings about life.</p>
+					<span class="card-tag interests">Interests</span>
+					<h2>Random Thoughts</h2>
+					<p>Observations and musings on life, tech, and everything else.</p>
 				</a>
 			</div>
 
-			<section aria-labelledby="find-me">
-				<h2 id="find-me">Find Me Around the Web</h2>
-				<ul class="social-list">
-					<li><a href="https://twitter.com/playingcatch">Twitter/X</a></li>
-				</ul>
-			</section>
+			{moneyPosts.length > 0 && (
+				<section>
+					<h2 class="section-title">Latest Posts</h2>
+					<div class="card-grid">
+						{moneyPosts.map((post) => (
+							<a href={`/money/${post.id}/`} class="card">
+								{post.data.heroImage && (
+									<img src={post.data.heroImage.src} alt="" class="card-image" />
+								)}
+								<div class="card-body">
+									<span class="card-tag money">Money</span>
+									<h3 class="card-title">{post.data.title}</h3>
+									{post.data.description && <p class="card-desc">{post.data.description}</p>}
+									<span class="card-date"><FormattedDate date={post.data.pubDate} /></span>
+								</div>
+							</a>
+						))}
+					</div>
+				</section>
+			)}
 		</main>
 		<Footer />
 	</body>

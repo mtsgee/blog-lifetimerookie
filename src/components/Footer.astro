@@ -3,34 +3,42 @@ const today = new Date();
 ---
 
 <footer>
-	<p class="tagline">Always learning, never an expert</p>
-	<p class="copyright">
-		&copy; {today.getFullYear()} Lifetime Rookie. Built with 
-		<a href="https://astro.build">Astro</a>, deployed on 
-		<a href="https://cloudflare.com">Cloudflare</a>.
-	</p>
-	<p class="social">
-		<a href="https://twitter.com/playingcatch" target="_blank" rel="noopener noreferrer">Twitter/X</a>
-		<span class="separator">|</span>
-		<a href="/rss.xml">RSS</a>
-	</p>
+	<div class="footer-inner">
+		<p class="tagline">Always learning, never an expert</p>
+		<p class="copyright">
+			&copy; {today.getFullYear()} Lifetime Rookie. Built with
+			<a href="https://astro.build">Astro</a>, deployed on
+			<a href="https://cloudflare.com">Cloudflare</a>.
+		</p>
+		<p class="social">
+			<a href="https://twitter.com/playingcatch" target="_blank" rel="noopener noreferrer">Twitter/X</a>
+			<span class="sep">&middot;</span>
+			<a href="/rss.xml">RSS</a>
+		</p>
+	</div>
 </footer>
 <style>
 	footer {
-		padding: 2rem 1rem 3rem 1rem;
 		border-top: 1px solid rgb(var(--gray-light));
-		color: rgb(var(--gray));
+		background: rgb(var(--gray-bg));
 		text-align: center;
-		font-size: 0.9rem;
+		font-size: 0.85rem;
+		color: rgb(var(--gray));
+	}
+
+	.footer-inner {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 2.5rem 1.5rem 3rem;
 	}
 
 	.tagline {
 		font-style: italic;
-		margin-bottom: 0.5rem;
+		margin: 0 0 0.75rem 0;
 	}
 
 	.copyright {
-		margin-bottom: 0.75rem;
+		margin: 0 0 0.75rem 0;
 	}
 
 	.copyright a {
@@ -47,14 +55,15 @@ const today = new Date();
 
 	.social a {
 		color: rgb(var(--gray-dark));
+		font-weight: 500;
 	}
 
 	.social a:hover {
 		color: var(--accent);
 	}
 
-	.separator {
-		color: rgb(var(--gray-light));
+	.sep {
 		margin: 0 0.5rem;
+		color: rgb(var(--gray-light));
 	}
 </style>

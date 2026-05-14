@@ -7,11 +7,8 @@ import HeaderLink from './HeaderLink.astro';
 		<a href="/" class="site-title">Lifetime Rookie</a>
 		<div class="nav-links">
 			<HeaderLink href="/">Home</HeaderLink>
-			<span class="separator">|</span>
 			<HeaderLink href="/personal">Personal</HeaderLink>
-			<span class="separator">|</span>
 			<HeaderLink href="/money">Money</HeaderLink>
-			<span class="separator">|</span>
 			<HeaderLink href="/interests">Interests</HeaderLink>
 		</div>
 	</nav>
@@ -19,23 +16,27 @@ import HeaderLink from './HeaderLink.astro';
 <style>
 	header {
 		border-bottom: 1px solid rgb(var(--gray-light));
-		background: #fff;
+		background: rgb(var(--white));
+		position: sticky;
+		top: 0;
+		z-index: 10;
 	}
 
 	nav {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 720px;
+		max-width: 900px;
 		margin: 0 auto;
-		padding: 1rem 1em;
+		padding: 0.875rem 1.5rem;
 	}
 
 	.site-title {
 		font-weight: 700;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		text-decoration: none;
 		color: rgb(var(--black));
+		letter-spacing: -0.01em;
 	}
 
 	.site-title:hover {
@@ -45,24 +46,19 @@ import HeaderLink from './HeaderLink.astro';
 	.nav-links {
 		display: flex;
 		align-items: center;
-		gap: 0.75rem;
-		font-size: 0.95rem;
-	}
-
-	.separator {
-		color: rgb(var(--gray-light));
-		user-select: none;
+		gap: 1.5rem;
+		font-size: 0.9rem;
 	}
 
 	@media (max-width: 600px) {
 		nav {
 			flex-direction: column;
-			gap: 0.75rem;
-			text-align: center;
+			gap: 0.5rem;
+			padding: 0.75rem 1rem;
 		}
 
 		.nav-links {
-			gap: 0.5rem;
+			gap: 1rem;
 			flex-wrap: wrap;
 			justify-content: center;
 		}
