@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+
+const all = await getCollection('personal');
+const portfolio = all.find(p => p.id === 'portfolio');
+const { Content } = await render(portfolio);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Personal | ${SITE_TITLE}`} description={portfolio.data.description} />
+		<style>
+			.content h1:first-child {
+				margin-top: 0;
+			}
+			.content h2 {
+				margin-top: 2.5rem;
+				padding-bottom: 0.5rem;
+				border-bottom: 2px solid rgb(var(--gray-light));
+			}
+			.content h3 {
+				margin-top: 1.5rem;
+				margin-bottom: 0.25rem;
+			}
+			.content h3 + p {
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+				margin-top: 0;
+				margin-bottom: 1rem;
+			}
+			.content ul {
+				padding-left: 1.5rem;
+			}
+			.content li {
+				margin-bottom: 0.5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<article class="content">
+				<Content />
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

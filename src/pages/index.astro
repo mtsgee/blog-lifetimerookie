@@ -1,14 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
-
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
 ---
 
 <!doctype html>
@@ -16,7 +10,6 @@ const posts = (await getCollection('blog')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			/* Hero Section */
 			.hero {
 				text-align: center;
 				padding: 3rem 1rem;
@@ -41,113 +34,48 @@ const posts = (await getCollection('blog')).sort(
 				line-height: 1.7;
 			}
 
-			.hero-buttons {
-				display: flex;
-				gap: 1rem;
-				justify-content: center;
-				flex-wrap: wrap;
+			/* Section Cards */
+			.section-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.5rem;
+				margin-bottom: 3rem;
 			}
 
-			.btn {
-				display: inline-block;
-				padding: 0.75rem 1.5rem;
+			.section-card {
+				display: flex;
+				flex-direction: column;
+				padding: 1.5rem;
+				border: 1px solid rgb(var(--gray-light));
 				border-radius: 0.5rem;
 				text-decoration: none;
-				font-weight: 600;
-				transition: background-color 0.2s ease, transform 0.2s ease;
+				color: inherit;
+				transition: border-color 0.2s ease, box-shadow 0.2s ease;
 			}
 
-			.btn:focus-visible {
+			.section-card:hover {
+				border-color: var(--accent);
+				box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+			}
+
+			.section-card:focus-visible {
 				outline: 2px solid var(--accent);
 				outline-offset: 2px;
 			}
 
-			.btn-primary {
-				background: var(--accent);
-				color: #fff;
+			.section-card h2 {
+				font-size: 1.25rem;
+				margin: 0 0 0.5rem 0;
+				color: var(--accent);
 			}
 
-			.btn-primary:hover {
-				background: var(--accent-dark);
-				color: #fff;
-			}
-
-			.btn-secondary {
-				background: rgb(var(--gray-light));
-				color: rgb(var(--gray-dark));
-			}
-
-			.btn-secondary:hover {
-				background: rgb(var(--gray));
-				color: #fff;
-			}
-
-			/* Section Styling */
-			section {
-				margin-bottom: 3rem;
-			}
-
-			section h2 {
-				font-size: 1.5rem;
-				margin-bottom: 1rem;
-				padding-bottom: 0.5rem;
-				border-bottom: 2px solid rgb(var(--gray-light));
-			}
-
-			/* Posts List */
-			.posts-list {
-				list-style: none;
-				padding: 0;
+			.section-card p {
 				margin: 0;
-			}
-
-			.posts-list li {
-				margin-bottom: 0.75rem;
-			}
-
-			.posts-list a {
-				display: flex;
-				flex-wrap: wrap;
-				justify-content: space-between;
-				align-items: baseline;
-				gap: 0.5rem;
-				text-decoration: none;
-				padding: 0.5rem 0;
-				border-radius: 0.25rem;
-				transition: color 0.2s ease;
-			}
-
-			.posts-list a:hover {
-				color: var(--accent);
-			}
-
-			.posts-list a:focus-visible {
-				outline: 2px solid var(--accent);
-				outline-offset: 4px;
-			}
-
-			.post-title {
-				color: rgb(var(--black));
-				font-weight: 500;
-			}
-
-			.posts-list a:hover .post-title {
-				color: var(--accent);
-			}
-
-			.post-date {
-				color: rgb(var(--gray));
-				font-size: 0.9rem;
-				white-space: nowrap;
-			}
-
-			.view-all {
-				display: inline-block;
-				margin-top: 1rem;
 				font-size: 0.95rem;
+				line-height: 1.6;
+				color: rgb(var(--gray));
 			}
 
-			/* Social Links Section */
 			.social-list {
 				list-style: none;
 				padding: 0;
@@ -172,9 +100,9 @@ const posts = (await getCollection('blog')).sort(
 				border-radius: 2px;
 			}
 
-			@media (prefers-reduced-motion: reduce) {
-				.btn {
-					transition: none;
+			@media (max-width: 640px) {
+				.section-grid {
+					grid-template-columns: 1fr;
 				}
 			}
 		</style>
@@ -186,34 +114,26 @@ const posts = (await getCollection('blog')).sort(
 				<h1 id="hero-title">Lifetime Rookie</h1>
 				<p class="hero-tagline">Always learning, never an expert</p>
 				<p class="hero-intro">
-					Welcome to my corner of the Internet. I share thoughts on <strong>life</strong>, 
-					<strong>soccer</strong>, <strong>wealth</strong>, and <strong>money</strong> in 
-					long and short form. Always a student, forever curious.
+					Welcome to my corner of the Internet. I write about <strong>personal</strong> growth,
+					<strong>money</strong>, and my <strong>interests</strong>.
+					Always a student, forever curious.
 				</p>
-				<div class="hero-buttons">
-					<a href="/long-form" class="btn btn-primary">Long Form</a>
-					<a href="/random-thoughts" class="btn btn-secondary">Random Thoughts</a>
-				</div>
 			</section>
 
-			<section aria-labelledby="recent-posts">
-				<h2 id="recent-posts">Recent Posts</h2>
-				{posts.length > 0 ? (
-					<ul class="posts-list">
-						{posts.slice(0, 5).map((post) => (
-							<li>
-								<a href={`/long-form/${post.id}/`}>
-									<span class="post-title">{post.data.title}</span>
-									<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
-								</a>
-							</li>
-						))}
-					</ul>
-				) : (
-					<p>No posts yet. Check back soon!</p>
-				)}
-				<a href="/long-form" class="view-all">View all posts &rarr;</a>
-			</section>
+			<div class="section-grid">
+				<a href="/personal" class="section-card">
+					<h2>Personal</h2>
+					<p>Portfolio, resume, and professional journey.</p>
+				</a>
+				<a href="/money" class="section-card">
+					<h2>Money</h2>
+					<p>Financial analysis, company deep dives, and stock research.</p>
+				</a>
+				<a href="/interests" class="section-card">
+					<h2>Interests</h2>
+					<p>Random thoughts, observations, and musings about life.</p>
+				</a>
+			</div>
 
 			<section aria-labelledby="find-me">
 				<h2 id="find-me">Find Me Around the Web</h2>
