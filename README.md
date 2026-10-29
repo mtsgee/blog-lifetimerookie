@@ -2,11 +2,10 @@
 
 Personal blog by Max Smith-Gee.
 
-Three core sections:
+Two core sections:
 
 - **Personal** — portfolio and resume
 - **Money** — financial analysis, company and stock deep dives
-- **Interests** — random thoughts and observations about life
 
 Built with [Astro](https://astro.build), deployed on [Cloudflare Pages](https://pages.cloudflare.com).
 

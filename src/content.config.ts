@@ -25,16 +25,4 @@ const money = defineCollection({
 		}),
 });
 
-const interests = defineCollection({
-	loader: glob({ base: './src/content/interests', pattern: '**/*.{md,mdx}' }),
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: image().optional(),
-		}),
-});
-
-export const collections = { personal, money, interests };
+export const collections = { personal, money };

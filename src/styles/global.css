@@ -11,7 +11,6 @@
 
 	--tag-personal: #1a1a1a;
 	--tag-money: #059669;
-	--tag-interests: #7c3aed;
 
 	--card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 	--card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -169,7 +168,6 @@ hr {
 
 .card-tag.personal { background: var(--tag-personal); }
 .card-tag.money { background: var(--tag-money); }
-.card-tag.interests { background: var(--tag-interests); }
 
 .card-title {
 	font-size: 1rem;

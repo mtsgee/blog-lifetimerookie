@@ -33,17 +33,10 @@ const moneyPosts = (await getCollection('money')).sort(
 				margin-bottom: 1rem;
 			}
 
-			.hero-intro {
-				max-width: 600px;
-				margin: 0 auto;
-				line-height: 1.8;
-				color: rgb(var(--gray-dark));
-			}
-
 			/* Category sections */
 			.section-grid {
 				display: grid;
-				grid-template-columns: repeat(3, 1fr);
+				grid-template-columns: repeat(2, 1fr);
 				gap: 1.25rem;
 				margin-bottom: 3rem;
 			}
@@ -91,10 +84,6 @@ const moneyPosts = (await getCollection('money')).sort(
 			<section class="hero">
 				<h1>Lifetime Rookie</h1>
 				<p class="hero-tagline">Always learning, never an expert</p>
-				<p class="hero-intro">
-					Welcome. I write about personal growth, money, and whatever else
-					catches my curiosity. Always a student, forever open to learning.
-				</p>
 			</section>
 
 			<div class="section-grid">
@@ -107,11 +96,6 @@ const moneyPosts = (await getCollection('money')).sort(
 					<span class="card-tag money">Money</span>
 					<h2>Financial Analysis</h2>
 					<p>Company deep dives, stock research, and investing thoughts.</p>
-				</a>
-				<a href="/interests" class="section-card">
-					<span class="card-tag interests">Interests</span>
-					<h2>Random Thoughts</h2>
-					<p>Observations and musings on life, tech, and everything else.</p>
 				</a>
 			</div>
 
