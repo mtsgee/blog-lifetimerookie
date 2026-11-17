@@ -6,6 +6,7 @@ Two core sections:
 
 - **Personal** — portfolio and resume
 - **Money** — financial analysis, company and stock deep dives
+- **Reverse DCF** — interactive reverse DCF calculator at `/reverse-dcf` (client-side, no backend)
 
 Built with [Astro](https://astro.build), deployed on [Cloudflare Pages](https://pages.cloudflare.com).
 

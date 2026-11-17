@@ -1,0 +1,709 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Reverse DCF | ${SITE_TITLE}`}
+			description="A quick reverse DCF calculator: start from the stock price, see the growth the market is pricing in, and compare bear, base, and bull valuations."
+		/>
+		<style>
+			.panel {
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: var(--radius);
+				box-shadow: var(--card-shadow);
+				padding: 1.25rem 1.5rem 1.5rem;
+				margin-bottom: 1.5rem;
+				background: rgb(var(--white));
+			}
+
+			.panel h2 {
+				font-size: 1.05rem;
+				margin-bottom: 1rem;
+				padding-bottom: 0.6rem;
+				border-bottom: 1px solid rgb(var(--gray-light));
+			}
+
+			.input-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 1rem;
+			}
+
+			label {
+				display: flex;
+				flex-direction: column;
+				gap: 0.3rem;
+				font-size: 0.78rem;
+				font-weight: 700;
+				color: rgb(var(--gray-dark));
+			}
+
+			input[type='number'] {
+				font-family: inherit;
+				font-size: 1rem;
+				padding: 0.45rem 0.6rem;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 6px;
+				background: rgb(var(--gray-bg));
+				color: rgb(var(--black));
+				width: 100%;
+			}
+
+			input[type='number']:focus {
+				outline: 2px solid var(--accent);
+				outline-offset: -1px;
+				background: rgb(var(--white));
+			}
+
+			.hint {
+				font-size: 0.78rem;
+				color: rgb(var(--gray));
+				margin: 0.9rem 0 0;
+			}
+
+			/* Reverse DCF result */
+			.implied {
+				display: flex;
+				align-items: center;
+				gap: 1.5rem;
+				flex-wrap: wrap;
+			}
+
+			.implied-number {
+				font-size: 2.5rem;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+				line-height: 1;
+				white-space: nowrap;
+			}
+
+			.implied-number small {
+				display: block;
+				font-size: 0.75rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+				color: rgb(var(--gray));
+				margin-top: 0.4rem;
+			}
+
+			.implied-text {
+				margin: 0;
+				font-size: 0.95rem;
+				color: rgb(var(--gray-dark));
+				flex: 1;
+				min-width: 240px;
+			}
+
+			/* Scenario cards */
+			.scenario-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.scenario {
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: var(--radius);
+				box-shadow: var(--card-shadow);
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+			}
+
+			.scenario header {
+				padding: 0.6rem 1rem;
+				color: #fff;
+				font-weight: 700;
+				font-size: 0.85rem;
+				text-transform: uppercase;
+				letter-spacing: 0.06em;
+			}
+
+			.scenario.bear header { background: var(--accent); }
+			.scenario.base header { background: var(--tag-personal); }
+			.scenario.bull header { background: var(--tag-money); }
+
+			.scenario-body {
+				padding: 1rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.75rem;
+				flex: 1;
+			}
+
+			.fv-row {
+				display: flex;
+				align-items: baseline;
+				justify-content: space-between;
+				gap: 0.5rem;
+				margin-top: 0.25rem;
+				padding-top: 0.75rem;
+				border-top: 1px solid rgb(var(--gray-light));
+			}
+
+			.fv {
+				font-size: 1.6rem;
+				font-weight: 700;
+				letter-spacing: -0.01em;
+			}
+
+			.fv small {
+				display: block;
+				font-size: 0.7rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: rgb(var(--gray));
+			}
+
+			.upside {
+				font-size: 0.85rem;
+				font-weight: 700;
+				padding: 0.2rem 0.55rem;
+				border-radius: 999px;
+				white-space: nowrap;
+			}
+
+			.upside.pos { color: #047857; background: #d1fae5; }
+			.upside.neg { color: var(--accent); background: #fde8ec; }
+
+			.breakdown {
+				margin: 0;
+				font-size: 0.8rem;
+				color: rgb(var(--gray));
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 0.15rem 0.75rem;
+			}
+
+			.breakdown dt { margin: 0; }
+			.breakdown dd {
+				margin: 0;
+				text-align: right;
+				font-variant-numeric: tabular-nums;
+				color: rgb(var(--gray-dark));
+			}
+
+			/* Valuation range bars */
+			.bars {
+				display: flex;
+				flex-direction: column;
+				gap: 0.6rem;
+			}
+
+			.bar-row {
+				display: grid;
+				grid-template-columns: 4.5rem 1fr 5.5rem;
+				align-items: center;
+				gap: 0.75rem;
+				font-size: 0.85rem;
+			}
+
+			.bar-label { font-weight: 700; }
+
+			.bar-track {
+				background: rgb(var(--gray-bg));
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 4px;
+				height: 1.4rem;
+				overflow: hidden;
+			}
+
+			.bar-fill {
+				height: 100%;
+				width: 0;
+				transition: width 0.25s ease;
+			}
+
+			.bar-fill.bear { background: var(--accent); }
+			.bar-fill.base { background: var(--tag-personal); }
+			.bar-fill.bull { background: var(--tag-money); }
+			.bar-fill.price {
+				background: repeating-linear-gradient(
+					45deg,
+					rgb(var(--gray)) 0 4px,
+					rgb(var(--gray-light)) 4px 8px
+				);
+			}
+
+			.bar-value {
+				text-align: right;
+				font-variant-numeric: tabular-nums;
+			}
+
+			/* Buttons */
+			.toolbar {
+				display: flex;
+				gap: 0.75rem;
+				margin-bottom: 1.5rem;
+			}
+
+			button {
+				font-family: inherit;
+				font-size: 0.85rem;
+				font-weight: 700;
+				padding: 0.5rem 1rem;
+				border-radius: 6px;
+				border: 1px solid rgb(var(--gray-light));
+				background: rgb(var(--white));
+				color: rgb(var(--gray-dark));
+				cursor: pointer;
+				transition: border-color 0.15s ease, color 0.15s ease;
+			}
+
+			button:hover {
+				border-color: var(--accent);
+				color: var(--accent);
+			}
+
+			.error-banner {
+				display: none;
+				background: #fde8ec;
+				color: var(--accent-dark);
+				border: 1px solid #f3c2cd;
+				border-radius: 6px;
+				padding: 0.6rem 0.9rem;
+				font-size: 0.85rem;
+				margin-bottom: 1.5rem;
+			}
+
+			.explainer {
+				font-size: 0.9rem;
+				color: rgb(var(--gray-dark));
+			}
+
+			.explainer summary {
+				font-weight: 700;
+				cursor: pointer;
+				color: rgb(var(--black));
+			}
+
+			.disclaimer {
+				font-size: 0.78rem;
+				color: rgb(var(--gray));
+				margin-top: 1.5rem;
+			}
+
+			@media (max-width: 760px) {
+				.input-grid { grid-template-columns: repeat(2, 1fr); }
+				.scenario-grid { grid-template-columns: 1fr; }
+				.implied-number { font-size: 2rem; }
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="page-header">
+				<h1>Reverse DCF Calculator</h1>
+				<p>Start from the stock price, see what growth the market is pricing in, then compare bear, base, and bull scenarios.</p>
+			</div>
+
+			<div class="error-banner" id="error-banner"></div>
+
+			<section class="panel">
+				<h2>Company inputs</h2>
+				<div class="input-grid">
+					<label>
+						Share price ($)
+						<input id="price" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Shares outstanding (M)
+						<input id="shares" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Net debt ($M)
+						<input id="netDebt" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Base FCF, TTM ($M)
+						<input id="fcf" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Discount rate (%)
+						<input id="wacc" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Terminal growth (%)
+						<input id="tg" type="number" step="any" inputmode="decimal" />
+					</label>
+					<label>
+						Stage 1 length (yrs)
+						<input id="y1" type="number" step="1" min="1" inputmode="numeric" />
+					</label>
+					<label>
+						Total forecast (yrs)
+						<input id="years" type="number" step="1" min="1" inputmode="numeric" />
+					</label>
+				</div>
+				<p class="hint">
+					Net debt = total debt minus cash (enter a negative number for net cash). Stage 1 covers years 1–<span id="y1-hint">5</span>, stage 2 covers the remaining years. All $ figures in millions except per-share amounts.
+				</p>
+			</section>
+
+			<section class="panel">
+				<h2>What the current price implies</h2>
+				<div class="implied">
+					<div class="implied-number">
+						<span id="implied-growth">—</span>
+						<small>implied FCF growth / yr</small>
+					</div>
+					<p class="implied-text" id="implied-text">
+						Enter a price, share count, and base FCF to see the growth rate baked into today's stock price.
+					</p>
+				</div>
+			</section>
+
+			<div class="scenario-grid">
+				<div class="scenario bear">
+					<header>Bear</header>
+					<div class="scenario-body">
+						<label>
+							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
+							<input id="bear-g1" type="number" step="any" inputmode="decimal" />
+						</label>
+						<label>
+							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
+							<input id="bear-g2" type="number" step="any" inputmode="decimal" />
+						</label>
+						<div class="fv-row">
+							<div class="fv"><small>Fair value / share</small><span id="bear-fv">—</span></div>
+							<span class="upside" id="bear-upside">—</span>
+						</div>
+						<dl class="breakdown" id="bear-breakdown"></dl>
+					</div>
+				</div>
+
+				<div class="scenario base">
+					<header>Base</header>
+					<div class="scenario-body">
+						<label>
+							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
+							<input id="base-g1" type="number" step="any" inputmode="decimal" />
+						</label>
+						<label>
+							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
+							<input id="base-g2" type="number" step="any" inputmode="decimal" />
+						</label>
+						<div class="fv-row">
+							<div class="fv"><small>Fair value / share</small><span id="base-fv">—</span></div>
+							<span class="upside" id="base-upside">—</span>
+						</div>
+						<dl class="breakdown" id="base-breakdown"></dl>
+					</div>
+				</div>
+
+				<div class="scenario bull">
+					<header>Bull</header>
+					<div class="scenario-body">
+						<label>
+							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
+							<input id="bull-g1" type="number" step="any" inputmode="decimal" />
+						</label>
+						<label>
+							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
+							<input id="bull-g2" type="number" step="any" inputmode="decimal" />
+						</label>
+						<div class="fv-row">
+							<div class="fv"><small>Fair value / share</small><span id="bull-fv">—</span></div>
+							<span class="upside" id="bull-upside">—</span>
+						</div>
+						<dl class="breakdown" id="bull-breakdown"></dl>
+					</div>
+				</div>
+			</div>
+
+			<section class="panel">
+				<h2>Valuation range vs. current price</h2>
+				<div class="bars">
+					<div class="bar-row">
+						<span class="bar-label">Bear</span>
+						<div class="bar-track"><div class="bar-fill bear" id="bar-bear"></div></div>
+						<span class="bar-value" id="barv-bear">—</span>
+					</div>
+					<div class="bar-row">
+						<span class="bar-label">Base</span>
+						<div class="bar-track"><div class="bar-fill base" id="bar-base"></div></div>
+						<span class="bar-value" id="barv-base">—</span>
+					</div>
+					<div class="bar-row">
+						<span class="bar-label">Bull</span>
+						<div class="bar-track"><div class="bar-fill bull" id="bar-bull"></div></div>
+						<span class="bar-value" id="barv-bull">—</span>
+					</div>
+					<div class="bar-row">
+						<span class="bar-label">Price</span>
+						<div class="bar-track"><div class="bar-fill price" id="bar-price"></div></div>
+						<span class="bar-value" id="barv-price">—</span>
+					</div>
+				</div>
+			</section>
+
+			<div class="toolbar">
+				<button id="share-btn" type="button">Copy share link</button>
+				<button id="reset-btn" type="button">Reset to defaults</button>
+			</div>
+
+			<details class="explainer">
+				<summary>How this works</summary>
+				<p>
+					A normal DCF starts with growth assumptions and produces a fair value. A <strong>reverse DCF</strong> flips it: it starts from the current market cap (price × shares, plus net debt) and solves for the free-cash-flow growth rate that would justify today's price. That tells you exactly what the market is expecting — so you can ask "is that realistic?" instead of building a model from scratch.
+				</p>
+				<p>
+					The scenario cards run the forward DCF: base FCF grows at your stage 1 rate, then your stage 2 rate, then the terminal rate forever (Gordon growth). Each year's cash flow is discounted back at your discount rate, summed with the discounted terminal value, minus net debt, divided by shares. Inputs are saved in your browser, and the share link encodes them in the URL.
+				</p>
+			</details>
+
+			<p class="disclaimer">Rough estimates only. Not investment advice.</p>
+		</main>
+		<Footer />
+
+		<script>
+			const SCENARIOS = ['bear', 'base', 'bull'];
+			const STORAGE_KEY = 'reverse-dcf-v1';
+
+			const DEFAULTS = {
+				price: 100,
+				shares: 100,
+				netDebt: 200,
+				fcf: 500,
+				wacc: 10,
+				tg: 2.5,
+				y1: 5,
+				years: 10,
+				bear: { g1: 0, g2: 2 },
+				base: { g1: 8, g2: 5 },
+				bull: { g1: 15, g2: 10 },
+			};
+
+			const $ = (id) => document.getElementById(id);
+
+			function inputIds() {
+				return ['price', 'shares', 'netDebt', 'fcf', 'wacc', 'tg', 'y1', 'years'];
+			}
+
+			function readState() {
+				const s = {};
+				for (const id of inputIds()) s[id] = parseFloat($(id).value);
+				for (const sc of SCENARIOS) {
+					s[sc] = {
+						g1: parseFloat($(sc + '-g1').value),
+						g2: parseFloat($(sc + '-g2').value),
+					};
+				}
+				return s;
+			}
+
+			function applyState(s) {
+				for (const id of inputIds()) {
+					if (typeof s[id] === 'number' && !Number.isNaN(s[id])) $(id).value = s[id];
+				}
+				for (const sc of SCENARIOS) {
+					if (s[sc]) {
+						if (typeof s[sc].g1 === 'number' && !Number.isNaN(s[sc].g1)) $(sc + '-g1').value = s[sc].g1;
+						if (typeof s[sc].g2 === 'number' && !Number.isNaN(s[sc].g2)) $(sc + '-g2').value = s[sc].g2;
+					}
+				}
+			}
+
+			function saveState(s) {
+				try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) { /* private mode */ }
+			}
+
+			function loadState() {
+				if (location.hash.startsWith('#s=')) {
+					try {
+						const json = atob(location.hash.slice(3).replace(/-/g, '+').replace(/_/g, '/'));
+						return JSON.parse(decodeURIComponent(escape(json)));
+					} catch (e) { /* fall through */ }
+				}
+				try {
+					const raw = localStorage.getItem(STORAGE_KEY);
+					if (raw) return JSON.parse(raw);
+				} catch (e) { /* ignore */ }
+				return null;
+			}
+
+			// --- DCF math ---
+			function dcf(fcf0, g1, g2, y1, years, wacc, tg) {
+				const r = wacc / 100;
+				const t = tg / 100;
+				let fcf = fcf0;
+				let pvExplicit = 0;
+				for (let yr = 1; yr <= years; yr++) {
+					fcf *= 1 + (yr <= y1 ? g1 : g2) / 100;
+					pvExplicit += fcf / Math.pow(1 + r, yr);
+				}
+				const tv = (fcf * (1 + t)) / (r - t);
+				const pvTV = tv / Math.pow(1 + r, years);
+				return { fcfN: fcf, pvExplicit, pvTV, ev: pvExplicit + pvTV };
+			}
+
+			function impliedGrowth(targetEV, fcf0, y1, years, wacc, tg) {
+				const f = (g) => dcf(fcf0, g, g, y1, years, wacc, tg).ev - targetEV;
+				const lo = -95;
+				const hi = 300;
+				if (f(lo) >= 0) return { value: null, reason: 'low' };
+				if (f(hi) <= 0) return { value: null, reason: 'high' };
+				let a = lo;
+				let b = hi;
+				for (let i = 0; i < 80; i++) {
+					const mid = (a + b) / 2;
+					if (f(mid) > 0) b = mid; else a = mid;
+				}
+				return { value: (a + b) / 2, reason: null };
+			}
+
+			// --- formatting ---
+			const fmtDollar = (v) => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+			const fmtM = (v) => '$' + Math.round(v).toLocaleString('en-US') + 'M';
+			const fmtPct = (v, signed) => (signed && v > 0 ? '+' : '') + v.toFixed(1) + '%';
+
+			function setBreakdown(el, r, equity) {
+				const termPct = r.ev !== 0 ? (r.pvTV / r.ev) * 100 : 0;
+				el.innerHTML =
+					'<dt>Year-' + $('years').value + ' FCF</dt><dd>' + fmtM(r.fcfN) + '</dd>' +
+					'<dt>Enterprise value</dt><dd>' + fmtM(r.ev) + '</dd>' +
+					'<dt>Equity value</dt><dd>' + fmtM(equity) + '</dd>' +
+					'<dt>PV of forecast</dt><dd>' + fmtM(r.pvExplicit) + '</dd>' +
+					'<dt>PV of terminal</dt><dd>' + fmtM(r.pvTV) + ' (' + termPct.toFixed(0) + '%)</dd>';
+			}
+
+			function showError(msg) {
+				const banner = $('error-banner');
+				if (msg) {
+					banner.textContent = msg;
+					banner.style.display = 'block';
+				} else {
+					banner.style.display = 'none';
+				}
+			}
+
+			function render() {
+				const s = readState();
+				saveState(s);
+
+				// keep dynamic year labels in sync
+				const y1 = Number.isNaN(s.y1) ? DEFAULTS.y1 : s.y1;
+				const years = Number.isNaN(s.years) ? DEFAULTS.years : s.years;
+				$('y1-hint').textContent = y1;
+				document.querySelectorAll('.y1-label').forEach((el) => (el.textContent = y1));
+				document.querySelectorAll('.y2-label').forEach((el) => (el.textContent = y1 + 1));
+				document.querySelectorAll('.yt-label').forEach((el) => (el.textContent = years));
+
+				// validation
+				if (![s.price, s.shares, s.netDebt, s.fcf, s.wacc, s.tg, s.y1, s.years].every((v) => typeof v === 'number' && !Number.isNaN(v))
+					|| SCENARIOS.some((sc) => Number.isNaN(s[sc].g1) || Number.isNaN(s[sc].g2))) {
+					showError('Fill in every field to see results.');
+					return;
+				}
+				if (s.wacc <= s.tg) {
+					showError('Discount rate must be greater than terminal growth rate.');
+					return;
+				}
+				if (s.shares <= 0 || s.price <= 0) {
+					showError('Price and shares outstanding must be positive.');
+					return;
+				}
+				if (s.y1 >= s.years) {
+					showError('Stage 1 length must be shorter than the total forecast period.');
+					return;
+				}
+				showError(null);
+
+				const fairValues = {};
+
+				for (const sc of SCENARIOS) {
+					const r = dcf(s.fcf, s[sc].g1, s[sc].g2, s.y1, s.years, s.wacc, s.tg);
+					const equity = r.ev - s.netDebt;
+					const fv = equity / s.shares;
+					fairValues[sc] = fv;
+
+					$(sc + '-fv').textContent = fmtDollar(fv);
+					const upside = (fv / s.price - 1) * 100;
+					const up = $(sc + '-upside');
+					up.textContent = fmtPct(upside, true) + ' vs price';
+					up.className = 'upside ' + (upside >= 0 ? 'pos' : 'neg');
+					setBreakdown($(sc + '-breakdown'), r, equity);
+				}
+
+				// reverse DCF
+				const targetEV = s.price * s.shares + s.netDebt;
+				const impliedEl = $('implied-growth');
+				const textEl = $('implied-text');
+				if (s.fcf <= 0) {
+					impliedEl.textContent = 'n/a';
+					textEl.textContent = 'Implied growth needs a positive base FCF — with negative FCF, a single solved growth rate is not meaningful.';
+				} else if (targetEV <= 0) {
+					impliedEl.textContent = 'n/a';
+					textEl.textContent = 'Net cash exceeds the market cap, so implied growth is not meaningful here.';
+				} else {
+					const res = impliedGrowth(targetEV, s.fcf, s.y1, s.years, s.wacc, s.tg);
+					if (res.value === null && res.reason === 'high') {
+						impliedEl.textContent = '>300%';
+						textEl.textContent = 'The price implies extreme growth (or your discount/terminal assumptions are too harsh for this stock).';
+					} else if (res.value === null) {
+						impliedEl.textContent = 'n/a';
+						textEl.textContent = 'Could not solve for an implied growth rate with these inputs.';
+					} else {
+						impliedEl.textContent = fmtPct(res.value, false);
+						textEl.textContent =
+							'At ' + fmtDollar(s.price) + ', the market is pricing in roughly ' + fmtPct(res.value, false) +
+							' annual FCF growth, every year for ' + s.years + ' years (then ' + s.tg + '% in perpetuity). Your Base case assumes ' +
+							s.base.g1 + '% for years 1–' + s.y1 + ', then ' + s.base.g2 + '%.';
+					}
+				}
+
+				// bars
+				const maxVal = Math.max(s.price, ...SCENARIOS.map((sc) => Math.max(fairValues[sc], 0)));
+				if (maxVal > 0) {
+					for (const sc of SCENARIOS) {
+						$('bar-' + sc).style.width = Math.max(fairValues[sc], 0) / maxVal * 100 + '%';
+						$('barv-' + sc).textContent = fmtDollar(fairValues[sc]);
+					}
+					$('bar-price').style.width = (s.price / maxVal) * 100 + '%';
+					$('barv-price').textContent = fmtDollar(s.price);
+				}
+			}
+
+			// --- wiring ---
+			applyState(loadState() || DEFAULTS);
+			render();
+
+			document.querySelectorAll("input[type='number']").forEach((el) => {
+				el.addEventListener('input', render);
+			});
+
+			$('reset-btn').addEventListener('click', () => {
+				try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+				history.replaceState(null, '', location.pathname);
+				applyState(DEFAULTS);
+				render();
+			});
+
+			$('share-btn').addEventListener('click', async (btn) => {
+				const state = readState();
+				const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(state))))
+					.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+				const url = location.origin + location.pathname + '#s=' + encoded;
+				const button = btn.currentTarget;
+				try {
+					await navigator.clipboard.writeText(url);
+					button.textContent = 'Link copied!';
+				} catch (e) {
+					button.textContent = url.length > 60 ? 'Copy failed' : url;
+				}
+				setTimeout(() => { button.textContent = 'Copy share link'; }, 2000);
+			});
+		</script>
+	</body>
+</html>
