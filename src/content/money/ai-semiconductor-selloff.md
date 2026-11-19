@@ -1,12 +1,12 @@
 ---
-title: 'AI''s Bad Hair Day: Is the Selloff the End of the Party or Just a Bad Haircut?'
-description: 'The Nasdaq just had its worst dollar day ever while AI capex keeps setting records. Sorting the AI bottleneck and semiconductor selloff: what broke, what didn''t, and whether this is 2000 all over again.'
+title: 'The Canary in the Coal Mine: Is the AI Selloff the First Domino to Fall?'
+description: 'The Nasdaq just had its worst dollar day ever while AI capex keeps setting records. The disconnect between what AI companies are doing and what the market is pricing — and whether this selloff is the canary in the coal mine.'
 pubDate: 'Nov 17 2026'
 ---
 
-Thursday, November 5 was brutal — $2.49 trillion evaporated from the Nasdaq, its largest one-day dollar loss ever, while the VIX spiked 70%, the third-biggest one-day jump on record (per Charlie Bilello's *The Week in Charts*, 11/10/26). The S&P 500 slid 4.4% and the Nasdaq dropped 5.5%. Since then, everyone's asking the same question: has the AI boom hit a wall, or is this the dip you're supposed to buy?
+Thursday, November 5 was brutal — $2.49 trillion evaporated from the Nasdaq, its largest one-day dollar loss ever, while the VIX spiked 70%, the third-biggest one-day jump on record (per Charlie Bilello's *The Week in Charts*, 11/10/26). The S&P 500 slid 4.4% and the Nasdaq dropped 5.5%.
 
-My honest answer is at the bottom. Here's how I'm thinking through it.
+So which is it: the canary in the coal mine — the first domino falling on the AI trade — or the dip you're supposed to endure? My honest answer is at the bottom. Here's how I'm thinking through it.
 
 ## What just happened
 
@@ -31,6 +31,14 @@ Here's the weird part: the spending hasn't slowed. At all.
 My take hasn't changed: AI is the biggest technology shift of my lifetime, the spend is still scaling, and the buildout is still getting done. The bottlenecks — GPUs, memory, power — are real and will persist for at least a few more years. The companies building capacity aren't acting like the party's over.
 
 But the market is clearly saying something else: it no longer believes this spend has a guaranteed ROI. Both things can be true at once. That's what makes this moment so strange.
+
+## The financing loop: NVIDIA is on both sides of the sale
+
+NVIDIA isn't just selling the shovels. It's also helping finance the people digging. In the simplest version of [circular financing](https://en.wikipedia.org/wiki/AI_build-out_financing#Circular_financing), NVIDIA invests in a model lab or backs a cloud provider's capacity; the lab signs a multiyear compute deal; and the cloud provider installs more NVIDIA gear to serve it. Take [Anthropic and Azure](https://blogs.microsoft.com/blog/2025/11/18/microsoft-nvidia-and-anthropic-announce-strategic-partnerships/): NVIDIA and Microsoft announced plans to invest up to **$10B and $5B**, respectively, in Anthropic, which in turn committed to buy **$30B of Azure compute**, with an initial capacity commitment of up to one gigawatt on NVIDIA systems. [OpenAI announced $30B of investment from NVIDIA](https://openai.com/index/scaling-ai-for-everyone/) alongside plans to use **5 GW** of Vera Rubin capacity for training and inference. And CoreWeave buys NVIDIA chips to rent them out, while NVIDIA is both a shareholder and the buyer of last resort for qualifying unsold capacity under an [initial $6.3B order](https://en.wikipedia.org/wiki/AI_build-out_financing#Allegations_of_channel_stuffing_and_idle_chips). Those are different arrangements — equity, compute purchases, a capacity backstop — not three interchangeable buckets of cash. But they do the same thing for the buildout: help turn future AI demand into hardware orders today.
+
+![Two examples of NVIDIA's financing relationships: NVIDIA and Microsoft pledged investments in Anthropic, which committed to buy Azure compute powered by NVIDIA systems. NVIDIA also took an equity stake in CoreWeave and agreed to buy qualifying unsold capacity, while CoreWeave buys NVIDIA GPUs.](/images/ai-financing-loop.svg)
+
+The risk is that the loop works in reverse, too. NVIDIA doesn't have to miss an earnings print for that to happen. If it stops making new commitments, a neocloud that was counting on a backstop may have to pay more to borrow, bring in a stronger tenant, or put the next cluster on hold. A delayed GPU ramp can push rental revenue out while lease and financing costs keep running. And if lenders start marking down the GPUs that secure some of these loans, the next project gets harder to finance even if the last one is still running. Fewer funded projects mean fewer chip orders; a weaker customer can hit NVIDIA twice, as both a supplier and an investor. The biggest hyperscalers don't suddenly stop spending because NVIDIA blinks. It's the marginal project — the one that only pencils out with cheap debt, a backstop, and full racks — that breaks first. The question I keep coming back to: **how much of this capacity would still get built without the vendor helping underwrite it?**
 
 ## The voters said no
 
