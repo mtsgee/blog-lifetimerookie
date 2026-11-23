@@ -1,12 +1,29 @@
 ---
 title: 'When the King Leaves the Castle: $NVDA After Jensen'
-description: 'NVIDIA doubled revenue and started shipping Vera Rubin as it navigates life after Jensen Huang. What the Q3 FY27 results show about the business, what they don''t tell us about succession, and how I thought about the pre-earnings price.'
+description: 'NVIDIA doubled revenue and started shipping Vera Rubin as it navigated life after Jensen Huang — and then the board brought him back six days after publicly ruling it out. What the Q3 FY27 results showed, how I thought about the pre-earnings price, and what the wildest two weeks in corporate governance mean for the AI trade.'
 pubDate: 'Nov 17 2026'
 ---
 
 Jensen Huang resigned as NVIDIA's CEO on November 11, 2026, and the stock went into tonight's Q3 report near its 52-week low of $148.80. The report just landed — revenue up 103%, guidance well above consensus — and the stock is up about 3% after hours. My take up front: NVIDIA absolutely survives this. CUDA is still the moat, the chips still lead. But the "Jensen premium" — the extra multiple the market paid for the man's market-making and aura — is gone, and it's not coming back under an interim CEO.
 
 One ground rule before we start: I'm not litigating whether he should have stayed or whether the board was right. This post is about the facts and how to think about $NVDA from here.
+
+## Update, Monday November 23: He's back. The AI trade is BACK.
+
+Forget everything I just wrote — because the board already did. This morning, [NVIDIA announced](https://nvidianews.nvidia.com/news/nvidia-board-reinstates-jensen-huang-as-president-ceo-and-board-director) that Jensen Huang is reinstated as President, CEO, and board director, effective immediately. Six days after publicly ruling his return out. Eleven days after accepting his resignation. The vote was unanimous.
+
+The details matter, because they're almost as wild as the reversal itself:
+
+- **The board's reasoning:** after a series of discussions, it was "satisfied with respect to Mr. Huang's candor and ability to lead" — and, crucially, it *received input from senior levels of the United States government* before concluding his reinstatement "poses no national security risk." The CEO of America's most important chip company came back, in part, on Washington's say-so.
+- **Trump says he made it happen.** In a CNBC interview after the announcement, the president said he personally "convinced" the board — while lawmakers from both parties trashed the decision, with one calling it a "failure of character." A bipartisan Congress is furious that the man who resigned amid a foreign-intelligence scandal is back, and Jensen is scheduled to testify before the Senate Banking Committee on December 3 — on export controls, of all things.
+- **The guardrails are real.** The independent-director investigation continues to conclusion, a new National Security and Export Control Committee has been formed, and NVIDIA is hiring its first Chief Compliance Officer. Harvey Jones stays as chair; Kress returns to the CFO job she never really stopped doing.
+- **The market's verdict was immediate.** The stock hadn't stabilized after earnings — it slid all last week to fresh lows ($124.50), well below the $148.80 level I wrote about below. This morning it ripped **+30%** intraday to ~$164, an open at $167. The whole AI complex went with it: CoreWeave, Nebius, and IREN all up 20%+, the Nasdaq surging after the S&P's seven-day losing streak.
+
+Here's the number I can't stop thinking about: between Thursday's close and this morning's high, roughly **half a trillion dollars of market value** swung on the news that one man got his desk chair back. The "Jensen premium" I wrote about below isn't gone — it never was. It was just priced wrong, twice, in two different directions, eleven days apart.
+
+My first tell from the bottom line below — "who gets the permanent CEO job" — got answered in the loudest way possible. Tells two and three are still live: whether the checkbook stays closed (tell #2), and whether the loyalists who threatened to walk actually stay (tell #3). And a new one: whether the compliance machinery being built around Jensen changes how he does the market-making that made him irreplaceable in the first place.
+
+Everything below is the post as I wrote it through the November 17 earnings print. I'm leaving it standing, because the whiplash *is* the story — but read it now knowing how it ends.
 
 ## What happened
 
@@ -83,4 +100,4 @@ NVIDIA without Jensen is still NVIDIA: CUDA, the chips, the margins, the demand 
 
 ---
 
-**Sources:** SEC Form 8-K (NVIDIA, filed November 12, 2026) — resignation and appointments. AP, TechCrunch, The Guardian, NPR, CNBC, NYT (November 12-17, 2026) — resignation context and interim leadership. WSJ via Semi-Doped newsletter (November 2026) — venture deal counts, cloud service agreements, supply/capacity commitments, Kress financing pullback, GTC Berlin remarks. Semi-Doped — UBS/Arcuri $50B estimate, QTS debt sale. Bloomberg/WSJ/CNBC (November 17, 2026) — Huang's return statement. NVIDIA Q3 FY27 earnings release, prepared remarks, and earnings call (November 17, 2026) — results, guidance, backlog, supply commitments, and the chairman's reinstatement comment; results and reaction via TheFly, StockAnalysis, Reuters, Invezz. WSJ via TechCrunch (November 17, 2026) — SEC civil probe. Financial Times — Singapore subsidiary revenue. S&P Global Market Intelligence via StockAnalysis (November 17, 2026) — market and TTM financial data. Reverse DCF and charts are my own.
+**Sources:** SEC Form 8-K (NVIDIA, filed November 12, 2026) — resignation and appointments. AP, TechCrunch, The Guardian, NPR, CNBC, NYT (November 12-17, 2026) — resignation context and interim leadership. WSJ via Semi-Doped newsletter (November 2026) — venture deal counts, cloud service agreements, supply/capacity commitments, Kress financing pullback, GTC Berlin remarks. Semi-Doped — UBS/Arcuri $50B estimate, QTS debt sale. Bloomberg/WSJ/CNBC (November 17, 2026) — Huang's return statement. NVIDIA Q3 FY27 earnings release, prepared remarks, and earnings call (November 17, 2026) — results, guidance, backlog, supply commitments, and the chairman's reinstatement comment; results and reaction via TheFly, StockAnalysis, Reuters, Invezz. WSJ via TechCrunch (November 17, 2026) — SEC civil probe. Financial Times — Singapore subsidiary revenue. S&P Global Market Intelligence via StockAnalysis (November 17, 2026) — market and TTM financial data. NVIDIA press release (November 23, 2026) — reinstatement, board statement, National Security and Export Control Committee; CNBC, MarketWatch, VentureBeat, TechCrunch (November 23, 2026) — Trump involvement, lawmaker reaction, Senate Banking Committee hearing. Reverse DCF and charts are my own.
