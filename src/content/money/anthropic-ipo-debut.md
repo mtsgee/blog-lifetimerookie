@@ -73,7 +73,7 @@ The IPO process pried loose numbers the S-1 kept redacted:
 
 ## The reverse DCF, take two: now we have a real price
 
-Last time I ran a reverse DCF against a hypothetical $2T valuation. Now the market has voted. Setup: at ~$95, Anthropic's market cap is ~$1.26T; less ~$210B of post-IPO cash, call it **~$1.05T enterprise value**. (Caveat: the $108.6B of convertible notes muddies true EV in both directions — they're dilution more than debt — so take the precision with salt.) Base year: $35.3B TTM revenue, FCF margin ramping from today's ~2%. Ten-year model, 12% discount rate, 4% terminal growth:
+Last time I ran a reverse DCF against a hypothetical $2T valuation. Now the market has voted. Setup: at ~$95, Anthropic's market cap is ~$1.26T; less ~$210B of post-IPO cash, call it roughly **$1.05T of enterprise value**. (Caveat: the $108.6B of convertible notes muddies true EV in both directions — they're dilution more than debt — so take the precision with salt.) Base year: $35.3B TTM revenue, FCF margin ramping from today's ~2%. Ten-year model, 12% discount rate, 4% terminal growth:
 
 | Scenario | 10-yr revenue path | FY36 FCF margin | Implied EV | vs. ~$1.05T today |
 |---|---|---|---|---|
