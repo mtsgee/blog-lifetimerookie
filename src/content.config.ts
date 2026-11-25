@@ -25,4 +25,17 @@ const money = defineCollection({
 		}),
 });
 
-export const collections = { personal, money };
+const music = defineCollection({
+	loader: glob({ base: './src/content/music', pattern: '**/*.{md,mdx}' }),
+	schema: z.object({
+		title: z.string(),
+		artist: z.string(),
+		type: z.enum(['song', 'album']),
+		url: z.string().url(),
+		videoId: z.string(),
+		note: z.string().optional(),
+		pubDate: z.coerce.date(),
+	}),
+});
+
+export const collections = { personal, money, music };
