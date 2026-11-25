@@ -4,64 +4,36 @@ const today = new Date();
 
 <footer>
 	<div class="footer-inner">
-		<p class="tagline">Always learning, never an expert</p>
-		<p class="copyright">
-			&copy; {today.getFullYear()} Lifetime Rookie. Built with
-			<a href="https://astro.build">Astro</a>, deployed on
-			<a href="https://cloudflare.com">Cloudflare</a>.
-		</p>
-		<p class="social">
-			<a href="/rss.xml">RSS</a>
+		<p>
+			&copy; {today.getFullYear()} Lifetime Rookie
+			&middot; <a href="/rss.xml">RSS</a>
+			&middot; Built with <a href="https://astro.build">Astro</a> on <a href="https://cloudflare.com">Cloudflare</a>
 		</p>
 	</div>
 </footer>
 <style>
 	footer {
 		border-top: 1px solid rgb(var(--gray-light));
-		background: rgb(var(--gray-bg));
 		text-align: center;
 		font-size: 0.85rem;
 		color: rgb(var(--gray));
 	}
 
 	.footer-inner {
-		max-width: 900px;
+		max-width: 720px;
 		margin: 0 auto;
-		padding: 2.5rem 1.5rem 3rem;
+		padding: 1.75rem 1.5rem 2rem;
 	}
 
-	.tagline {
-		font-style: italic;
-		margin: 0 0 0.75rem 0;
-	}
-
-	.copyright {
-		margin: 0 0 0.75rem 0;
-	}
-
-	.copyright a {
-		color: rgb(var(--gray-dark));
-	}
-
-	.copyright a:hover {
-		color: var(--accent);
-	}
-
-	.social {
+	footer p {
 		margin: 0;
 	}
 
-	.social a {
+	footer a {
 		color: rgb(var(--gray-dark));
-		font-weight: 500;
 	}
 
-	.social a:hover {
+	footer a:hover {
 		color: var(--accent);
-	}
-
-	.sep {
-		margin: 0 0.5rem;
-		color: rgb(var(--gray-light));
 	}
 </style>

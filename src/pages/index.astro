@@ -16,109 +16,57 @@ const moneyPosts = (await getCollection('money')).sort(
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
-			.hero {
-				text-align: center;
-				padding: 4rem 1rem 3rem;
+			.intro {
+				color: rgb(var(--black));
+				font-size: 1.25rem;
+				font-weight: 600;
+				letter-spacing: -0.01em;
+				margin: 1.5rem 0 3rem 0;
+				line-height: 1.5;
 			}
 
-			.hero h1 {
-				font-size: 2.75rem;
-				margin-bottom: 0.5rem;
-				letter-spacing: -0.02em;
-			}
-
-			.hero-tagline {
-				color: rgb(var(--gray));
-				font-size: 1.125rem;
-				margin-bottom: 1rem;
-			}
-
-			/* Category sections */
-			.section-grid {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 1.25rem;
-				margin-bottom: 3rem;
-			}
-
-			.section-card {
-				display: flex;
-				flex-direction: column;
-				padding: 1.5rem;
-				border: 1px solid rgb(var(--gray-light));
-				border-radius: var(--radius);
-				text-decoration: none;
-				color: inherit;
-				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-				box-shadow: var(--card-shadow);
-			}
-
-			.section-card:hover {
-				transform: translateY(-2px);
-				box-shadow: var(--card-shadow-hover);
-				border-color: rgb(var(--gray));
-			}
-
-			.section-card h2 {
-				font-size: 1.15rem;
-				margin: 0 0 0.5rem 0;
-			}
-
-			.section-card p {
-				margin: 0;
+			.more-links {
+				margin-top: 2.5rem;
 				font-size: 0.9rem;
-				line-height: 1.6;
 				color: rgb(var(--gray));
 			}
 
-			@media (max-width: 640px) {
-				.hero { padding: 2.5rem 1rem 2rem; }
-				.hero h1 { font-size: 2rem; }
-				.section-grid { grid-template-columns: 1fr; }
+			.more-links a {
+				color: rgb(var(--gray-dark));
+				font-weight: 500;
+			}
+
+			.more-links a:hover {
+				color: var(--accent);
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<section class="hero">
-				<h1>Lifetime Rookie</h1>
-				<p class="hero-tagline">Always learning, never an expert</p>
-			</section>
-
-			<div class="section-grid">
-				<a href="/personal" class="section-card">
-					<span class="card-tag personal">Personal</span>
-					<h2>Portfolio &amp; Resume</h2>
-					<p>My professional journey, background, and what drives me.</p>
-				</a>
-				<a href="/money" class="section-card">
-					<span class="card-tag money">Money</span>
-					<h2>Financial Analysis</h2>
-					<p>Company deep dives, stock research, and investing thoughts.</p>
-				</a>
-			</div>
+			<p class="intro">Always learning, never an expert.</p>
 
 			{moneyPosts.length > 0 && (
 				<section>
-					<h2 class="section-title">Latest Posts</h2>
-					<div class="card-grid">
+					<h2 class="section-title">Latest Writing</h2>
+					<ul class="post-list">
 						{moneyPosts.map((post) => (
-							<a href={`/money/${post.id}/`} class="card">
-								{post.data.heroImage && (
-									<img src={post.data.heroImage.src} alt="" class="card-image" />
-								)}
-								<div class="card-body">
-									<span class="card-tag money">Money</span>
-									<h3 class="card-title">{post.data.title}</h3>
-									{post.data.description && <p class="card-desc">{post.data.description}</p>}
-									<span class="card-date"><FormattedDate date={post.data.pubDate} /></span>
-								</div>
-							</a>
+							<li>
+								<a href={`/money/${post.id}/`}>
+									<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+									<span class="post-title">{post.data.title}</span>
+									{post.data.description && <p class="post-desc">{post.data.description}</p>}
+								</a>
+							</li>
 						))}
-					</div>
+					</ul>
+					<a class="view-all" href="/money">All money posts →</a>
 				</section>
 			)}
+
+			<p class="more-links">
+				<a href="/personal">Personal</a> &nbsp;·&nbsp; <a href="/reverse-dcf">Reverse DCF calculator</a>
+			</p>
 		</main>
 		<Footer />
 	</body>

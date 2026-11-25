@@ -2,6 +2,7 @@
 title: 'Cloudflare (NET) Q2 2026 Deep Dive: Record Growth, a 20% Cut, and the Agentic Internet Bet'
 description: 'Cloudflare grew revenue 36% in Q2 2026 while cutting 20% of its workforce to fund an AI-first pivot. A look at the numbers, the product stack for the agentic Internet, and what the stock price already assumes.'
 pubDate: 'Oct 14 2026'
+heroImage: ../../assets/hero-cloudflare.png
 ---
 
 Cloudflare's Q2 2026 results, reported on August 6, tell two stories at once. Revenue jumped 36% year-over-year to $696.1 million, free cash flow surged 69% to $56.4 million, and the company added paying customers at a record pace. At the same time, Cloudflare booked a $150.7 million restructuring charge tied to "the Plan" — a shift to what it calls an agentic AI-first operating model that cuts roughly 20% of its workforce.

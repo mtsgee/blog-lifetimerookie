@@ -2,6 +2,7 @@
 title: 'Costco (COST) Deep Dive: The Membership Fortress With No AI Plumbing'
 description: 'Costco grew revenue 10% to $303B in FY2026 with zero exposure to the AI buildout. A deep dive on its all-weather model, the membership flywheel, the global growth runway, and what the $445B valuation already assumes.'
 pubDate: 'Oct 26 2026'
+heroImage: ../../assets/hero-costco.png
 ---
 
 While the market spent 2026 obsessing over AI infrastructure, Costco quietly did what it always does: grow revenue every single month, collect its membership fees, and open warehouses. FY2026 revenue rose 10.1% to $303.2 billion and net income rose 13.9% to $9.2 billion — no GPUs required.

@@ -2,6 +2,7 @@
 title: '$ANT Files to Go Public: Inside Anthropic''s S-1, the $200B Compute Tab, and a $2T Question'
 description: 'Anthropic''s S-1 dropped today. Revenue is up 1,300%, the headline loss is $80.7B (mostly accounting fiction), and the company has signed over $155B of non-cancelable compute contracts. A thorough breakdown of the numbers, the roadmap, the risks, and a rough reverse DCF on the reported $2T valuation.'
 pubDate: 'Oct 26 2026'
+heroImage: ../../assets/hero-anthropic.png
 ---
 
 Anthropic's Form S-1 hit the SEC's doorstep today, making $ANT the most anticipated AI listing of the year. I've been through the filing so you don't have to. Here's what matters.

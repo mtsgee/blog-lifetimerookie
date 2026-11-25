@@ -24,21 +24,17 @@ const posts = (await getCollection('money')).sort(
 				<p>Financial analysis, company deep dives, and stock research</p>
 			</div>
 			{posts.length > 0 ? (
-				<div class="card-grid">
+				<ul class="post-list">
 					{posts.map((post) => (
-						<a href={`/money/${post.id}/`} class="card">
-							{post.data.heroImage && (
-								<img src={post.data.heroImage.src} alt="" class="card-image" />
-							)}
-							<div class="card-body">
-								<span class="card-tag money">Money</span>
-								<h3 class="card-title">{post.data.title}</h3>
-								{post.data.description && <p class="card-desc">{post.data.description}</p>}
-								<span class="card-date"><FormattedDate date={post.data.pubDate} /></span>
-							</div>
-						</a>
+						<li>
+							<a href={`/money/${post.id}/`}>
+								<span class="post-date"><FormattedDate date={post.data.pubDate} /></span>
+								<span class="post-title">{post.data.title}</span>
+								{post.data.description && <p class="post-desc">{post.data.description}</p>}
+							</a>
+						</li>
 					))}
-				</div>
+				</ul>
 			) : (
 				<div class="empty-state">
 					<p>No posts yet. Check back soon!</p>

@@ -13,20 +13,45 @@ import { SITE_TITLE } from '../consts';
 			description="A quick reverse DCF calculator: start from the stock price, see the growth the market is pricing in, and compare bear, base, and bull valuations."
 		/>
 		<style>
-			.panel {
+			.step {
 				border: 1px solid rgb(var(--gray-light));
 				border-radius: var(--radius);
-				box-shadow: var(--card-shadow);
 				padding: 1.25rem 1.5rem 1.5rem;
-				margin-bottom: 1.5rem;
+				margin-bottom: 1.25rem;
 				background: rgb(var(--white));
 			}
 
-			.panel h2 {
+			.step-head {
+				display: flex;
+				align-items: flex-start;
+				gap: 0.75rem;
+				margin-bottom: 1.1rem;
+			}
+
+			.step-num {
+				flex: none;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 1.5rem;
+				height: 1.5rem;
+				border-radius: 999px;
+				background: var(--accent);
+				color: #fff;
+				font-size: 0.85rem;
+				font-weight: 700;
+				margin-top: 0.1rem;
+			}
+
+			.step-head h2 {
 				font-size: 1.05rem;
-				margin-bottom: 1rem;
-				padding-bottom: 0.6rem;
-				border-bottom: 1px solid rgb(var(--gray-light));
+				margin: 0 0 0.15rem 0;
+			}
+
+			.step-head p {
+				margin: 0;
+				font-size: 0.85rem;
+				color: rgb(var(--gray));
 			}
 
 			.input-grid {
@@ -39,18 +64,18 @@ import { SITE_TITLE } from '../consts';
 				display: flex;
 				flex-direction: column;
 				gap: 0.3rem;
-				font-size: 0.78rem;
-				font-weight: 700;
+				font-size: 0.8rem;
+				font-weight: 600;
 				color: rgb(var(--gray-dark));
 			}
 
 			input[type='number'] {
 				font-family: inherit;
 				font-size: 1rem;
-				padding: 0.45rem 0.6rem;
+				padding: 0.5rem 0.65rem;
 				border: 1px solid rgb(var(--gray-light));
 				border-radius: 6px;
-				background: rgb(var(--gray-bg));
+				background: rgb(var(--white));
 				color: rgb(var(--black));
 				width: 100%;
 			}
@@ -58,13 +83,22 @@ import { SITE_TITLE } from '../consts';
 			input[type='number']:focus {
 				outline: 2px solid var(--accent);
 				outline-offset: -1px;
-				background: rgb(var(--white));
 			}
 
 			.hint {
 				font-size: 0.78rem;
 				color: rgb(var(--gray));
 				margin: 0.9rem 0 0;
+			}
+
+			/* Results — dim until inputs are valid */
+			#results {
+				opacity: 0.45;
+				transition: opacity 0.3s ease;
+			}
+
+			#results.ready {
+				opacity: 1;
 			}
 
 			/* Reverse DCF result */
@@ -106,13 +140,11 @@ import { SITE_TITLE } from '../consts';
 				display: grid;
 				grid-template-columns: repeat(3, 1fr);
 				gap: 1rem;
-				margin-bottom: 1.5rem;
 			}
 
 			.scenario {
 				border: 1px solid rgb(var(--gray-light));
 				border-radius: var(--radius);
-				box-shadow: var(--card-shadow);
 				overflow: hidden;
 				display: flex;
 				flex-direction: column;
@@ -272,7 +304,7 @@ import { SITE_TITLE } from '../consts';
 				border-radius: 6px;
 				padding: 0.6rem 0.9rem;
 				font-size: 0.85rem;
-				margin-bottom: 1.5rem;
+				margin-bottom: 1.25rem;
 			}
 
 			.explainer {
@@ -301,16 +333,20 @@ import { SITE_TITLE } from '../consts';
 	</head>
 	<body>
 		<Header />
-		<main>
+		<main class="wide">
 			<div class="page-header">
 				<h1>Reverse DCF Calculator</h1>
 				<p>Start from the stock price, see what growth the market is pricing in, then compare bear, base, and bull scenarios.</p>
 			</div>
 
-			<div class="error-banner" id="error-banner"></div>
-
-			<section class="panel">
-				<h2>Company inputs</h2>
+			<section class="step">
+				<div class="step-head">
+					<span class="step-num">1</span>
+					<div>
+						<h2>The company</h2>
+						<p>Start here — today's numbers for the stock you're analyzing.</p>
+					</div>
+				</div>
 				<div class="input-grid">
 					<label>
 						Share price ($)
@@ -328,6 +364,18 @@ import { SITE_TITLE } from '../consts';
 						Base FCF, TTM ($M)
 						<input id="fcf" type="number" step="any" inputmode="decimal" />
 					</label>
+				</div>
+			</section>
+
+			<section class="step">
+				<div class="step-head">
+					<span class="step-num">2</span>
+					<div>
+						<h2>Assumptions</h2>
+						<p>How you discount cash flows and how far out you forecast.</p>
+					</div>
+				</div>
+				<div class="input-grid">
 					<label>
 						Discount rate (%)
 						<input id="wacc" type="number" step="any" inputmode="decimal" />
@@ -350,103 +398,127 @@ import { SITE_TITLE } from '../consts';
 				</p>
 			</section>
 
-			<section class="panel">
-				<h2>What the current price implies</h2>
-				<div class="implied">
-					<div class="implied-number">
-						<span id="implied-growth">—</span>
-						<small>implied FCF growth / yr</small>
-					</div>
-					<p class="implied-text" id="implied-text">
-						Enter a price, share count, and base FCF to see the growth rate baked into today's stock price.
-					</p>
-				</div>
-			</section>
+			<div class="error-banner" id="error-banner"></div>
 
-			<div class="scenario-grid">
-				<div class="scenario bear">
-					<header>Bear</header>
-					<div class="scenario-body">
-						<label>
-							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
-							<input id="bear-g1" type="number" step="any" inputmode="decimal" />
-						</label>
-						<label>
-							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
-							<input id="bear-g2" type="number" step="any" inputmode="decimal" />
-						</label>
-						<div class="fv-row">
-							<div class="fv"><small>Fair value / share</small><span id="bear-fv">—</span></div>
-							<span class="upside" id="bear-upside">—</span>
+			<div id="results">
+				<section class="step">
+					<div class="step-head">
+						<span class="step-num">3</span>
+						<div>
+							<h2>What the current price implies</h2>
+							<p>The growth rate baked into today's price.</p>
 						</div>
-						<dl class="breakdown" id="bear-breakdown"></dl>
 					</div>
-				</div>
+					<div class="implied">
+						<div class="implied-number">
+							<span id="implied-growth">—</span>
+							<small>implied FCF growth / yr</small>
+						</div>
+						<p class="implied-text" id="implied-text">
+							Enter a price, share count, and base FCF to see the growth rate baked into today's stock price.
+						</p>
+					</div>
+				</section>
 
-				<div class="scenario base">
-					<header>Base</header>
-					<div class="scenario-body">
-						<label>
-							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
-							<input id="base-g1" type="number" step="any" inputmode="decimal" />
-						</label>
-						<label>
-							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
-							<input id="base-g2" type="number" step="any" inputmode="decimal" />
-						</label>
-						<div class="fv-row">
-							<div class="fv"><small>Fair value / share</small><span id="base-fv">—</span></div>
-							<span class="upside" id="base-upside">—</span>
+				<section class="step">
+					<div class="step-head">
+						<span class="step-num">4</span>
+						<div>
+							<h2>Your scenarios</h2>
+							<p>Adjust growth per case; fair value updates live.</p>
 						</div>
-						<dl class="breakdown" id="base-breakdown"></dl>
 					</div>
-				</div>
+					<div class="scenario-grid">
+						<div class="scenario bear">
+							<header>Bear</header>
+							<div class="scenario-body">
+								<label>
+									<span class="lbl">Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)</span>
+									<input id="bear-g1" type="number" step="any" inputmode="decimal" />
+								</label>
+								<label>
+									<span class="lbl">Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)</span>
+									<input id="bear-g2" type="number" step="any" inputmode="decimal" />
+								</label>
+								<div class="fv-row">
+									<div class="fv"><small>Fair value / share</small><span id="bear-fv">—</span></div>
+									<span class="upside" id="bear-upside">—</span>
+								</div>
+								<dl class="breakdown" id="bear-breakdown"></dl>
+							</div>
+						</div>
 
-				<div class="scenario bull">
-					<header>Bull</header>
-					<div class="scenario-body">
-						<label>
-							Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)
-							<input id="bull-g1" type="number" step="any" inputmode="decimal" />
-						</label>
-						<label>
-							Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)
-							<input id="bull-g2" type="number" step="any" inputmode="decimal" />
-						</label>
-						<div class="fv-row">
-							<div class="fv"><small>Fair value / share</small><span id="bull-fv">—</span></div>
-							<span class="upside" id="bull-upside">—</span>
+						<div class="scenario base">
+							<header>Base</header>
+							<div class="scenario-body">
+								<label>
+									<span class="lbl">Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)</span>
+									<input id="base-g1" type="number" step="any" inputmode="decimal" />
+								</label>
+								<label>
+									<span class="lbl">Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)</span>
+									<input id="base-g2" type="number" step="any" inputmode="decimal" />
+								</label>
+								<div class="fv-row">
+									<div class="fv"><small>Fair value / share</small><span id="base-fv">—</span></div>
+									<span class="upside" id="base-upside">—</span>
+								</div>
+								<dl class="breakdown" id="base-breakdown"></dl>
+							</div>
 						</div>
-						<dl class="breakdown" id="bull-breakdown"></dl>
+
+						<div class="scenario bull">
+							<header>Bull</header>
+							<div class="scenario-body">
+								<label>
+									<span class="lbl">Stage 1 growth · yrs 1–<span class="y1-label">5</span> (%)</span>
+									<input id="bull-g1" type="number" step="any" inputmode="decimal" />
+								</label>
+								<label>
+									<span class="lbl">Stage 2 growth · yrs <span class="y2-label">6</span>–<span class="yt-label">10</span> (%)</span>
+									<input id="bull-g2" type="number" step="any" inputmode="decimal" />
+								</label>
+								<div class="fv-row">
+									<div class="fv"><small>Fair value / share</small><span id="bull-fv">—</span></div>
+									<span class="upside" id="bull-upside">—</span>
+								</div>
+								<dl class="breakdown" id="bull-breakdown"></dl>
+							</div>
+						</div>
 					</div>
-				</div>
+				</section>
+
+				<section class="step">
+					<div class="step-head">
+						<span class="step-num">5</span>
+						<div>
+							<h2>Valuation range vs. current price</h2>
+						</div>
+					</div>
+					<div class="bars">
+						<div class="bar-row">
+							<span class="bar-label">Bear</span>
+							<div class="bar-track"><div class="bar-fill bear" id="bar-bear"></div></div>
+							<span class="bar-value" id="barv-bear">—</span>
+						</div>
+						<div class="bar-row">
+							<span class="bar-label">Base</span>
+							<div class="bar-track"><div class="bar-fill base" id="bar-base"></div></div>
+							<span class="bar-value" id="barv-base">—</span>
+						</div>
+						<div class="bar-row">
+							<span class="bar-label">Bull</span>
+							<div class="bar-track"><div class="bar-fill bull" id="bar-bull"></div></div>
+							<span class="bar-value" id="barv-bull">—</span>
+						</div>
+						<div class="bar-row">
+							<span class="bar-label">Price</span>
+							<div class="bar-track"><div class="bar-fill price" id="bar-price"></div></div>
+							<span class="bar-value" id="barv-price">—</span>
+						</div>
+					</div>
+				</section>
 			</div>
-
-			<section class="panel">
-				<h2>Valuation range vs. current price</h2>
-				<div class="bars">
-					<div class="bar-row">
-						<span class="bar-label">Bear</span>
-						<div class="bar-track"><div class="bar-fill bear" id="bar-bear"></div></div>
-						<span class="bar-value" id="barv-bear">—</span>
-					</div>
-					<div class="bar-row">
-						<span class="bar-label">Base</span>
-						<div class="bar-track"><div class="bar-fill base" id="bar-base"></div></div>
-						<span class="bar-value" id="barv-base">—</span>
-					</div>
-					<div class="bar-row">
-						<span class="bar-label">Bull</span>
-						<div class="bar-track"><div class="bar-fill bull" id="bar-bull"></div></div>
-						<span class="bar-value" id="barv-bull">—</span>
-					</div>
-					<div class="bar-row">
-						<span class="bar-label">Price</span>
-						<div class="bar-track"><div class="bar-fill price" id="bar-price"></div></div>
-						<span class="bar-value" id="barv-price">—</span>
-					</div>
-				</div>
-			</section>
 
 			<div class="toolbar">
 				<button id="share-btn" type="button">Copy share link</button>
@@ -592,6 +664,9 @@ import { SITE_TITLE } from '../consts';
 				const s = readState();
 				saveState(s);
 
+				const results = $('results');
+				results.classList.remove('ready');
+
 				// keep dynamic year labels in sync
 				const y1 = Number.isNaN(s.y1) ? DEFAULTS.y1 : s.y1;
 				const years = Number.isNaN(s.years) ? DEFAULTS.years : s.years;
@@ -619,6 +694,7 @@ import { SITE_TITLE } from '../consts';
 					return;
 				}
 				showError(null);
+				results.classList.add('ready');
 
 				const fairValues = {};
 
@@ -678,6 +754,7 @@ import { SITE_TITLE } from '../consts';
 			// --- wiring ---
 			applyState(loadState() || DEFAULTS);
 			render();
+			$('price').focus();
 
 			document.querySelectorAll("input[type='number']").forEach((el) => {
 				el.addEventListener('input', render);
